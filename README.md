@@ -1,2 +1,3 @@
 # docker-nodejs
-Development environment
+
+Docker Node.js system development and production environment for Node.js with nginx
