@@ -1,0 +1,9 @@
+{
+  "name": "docker-node-api-rest-example",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "4.12.2",
+    "method-override": "2.3.1",
+    "body-parser": "1.12.0"
+  }
+}
