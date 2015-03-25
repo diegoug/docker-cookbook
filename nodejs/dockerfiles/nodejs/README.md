@@ -19,10 +19,14 @@ Install nodejs requirements:
 Launching NodeJS
 ----------------
 
-To run container:
+### Recommendation ###
+if you run the container in production, please remember to run the container nginx.
+
+To run container in production:
 
     $ sudo docker run --name nodejs -d --privileged=true -v /opt/dockerNodejs/nodejs/:/opt/nodejs/ <username>/nodejs
 
+
 To work in development mode with container:
 
-    $ sudo docker run --name dev-nodejs -d -p 8080:8080 -p 8081:8081 --privileged=true -v /opt/dockerNodejs/nodejs/:/opt/nodejs/ <username>/nodejs /bin/bash /node_debugger.sh
+    $ sudo docker run --name dev-nodejs -d -p 8080:8080 -p 8081:8081 --privileged=true -v /opt/dockerfiles/nodejs/app/:/opt/nodejs/ <username>/nodejs /bin/bash /node_debugger.sh

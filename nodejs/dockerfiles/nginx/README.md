@@ -15,6 +15,9 @@ Perform the build the container:
 Launching Nginx
 ---------------
 
+### Recommendation ###
+if you run the container in production, remember that you must run the container nodejs.
+
 To run container:
 
     $ sudo docker run -d --name=nginx -p 80:80 --link nodejs:nodejs <username>/nginx
