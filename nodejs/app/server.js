@@ -4,11 +4,6 @@ var express        = require("express"),
     bodyParser     = require("body-parser"),
     methodOverride = require("method-override");
 
-// Middlewares
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(methodOverride());
-
 // Example Route
 var router = express.Router();
 router.get('/', function(req, res) {
