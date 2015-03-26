@@ -14,7 +14,7 @@ Perform the build the container:
 
 Install nodejs requirements:
 
-    $ sudo docker run --rm --privileged=true -v /opt/dockerNodejs/nodejs/:/opt/nodejs/ <username>/nodejs /npm_install.sh
+    $ sudo docker run --rm --privileged=true -v /opt/dockerfiles/nodejs/app/:/opt/nodejs/ <username>/nodejs /npm_install.sh
 
 Launching NodeJS
 ----------------
@@ -24,7 +24,7 @@ if you run the container in production, please remember to run the container ngi
 
 To run container in production:
 
-    $ sudo docker run --name nodejs -d --privileged=true -v /opt/dockerNodejs/nodejs/:/opt/nodejs/ <username>/nodejs
+    $ sudo docker run --name nodejs -d --privileged=true -v /opt/dockerfiles/nodejs/app/:/opt/nodejs/ <username>/nodejs
 
 
 To work in development mode with container:
