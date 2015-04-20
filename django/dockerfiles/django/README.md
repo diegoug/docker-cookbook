@@ -23,12 +23,13 @@ To work in development mode with container:
 
     $ sudo docker run --name dev-django -it -p 8000:8000 -v /opt/dockerfiles/django/app/:/opt/django/Django/ --privileged=true <username>/django /bin/bash
 
-### Commands to work in development mode with container ###
+Using your django container in development mode
+-----------------------------------------------
 
-    $ cd /opt/django/
-    $ source bin/activate
-    $ cd Django
-    ## if not install requirements
-    $ pip install -r requirements.txt
-    ## end if
-    $ python manage.py runserver 0.0.0.0:8000
+To run the application on development mode 
+
+    $ sudo docker exec -it dev-django /django_dev.sh
+
+To acces in the application on development mode    
+    
+    http://127.0.0.1:8000

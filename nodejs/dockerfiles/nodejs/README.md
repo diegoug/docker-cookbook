@@ -30,3 +30,15 @@ To run container in production:
 To work in development mode with container:
 
     $ sudo docker run --name dev-nodejs -d -p 8080:8080 -p 8081:8081 --privileged=true -v /opt/dockerfiles/nodejs/app/:/opt/nodejs/ <username>/nodejs /bin/bash /node_debugger.sh
+
+Using your nodejs container in development mode
+-----------------------------------------------
+
+To acces in the application on development mode    
+    
+    http://127.0.0.1:8080
+
+To acces in the element inspector
+    
+    http://127.0.0.1:8081/debug?port=5858
+    
