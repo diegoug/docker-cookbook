@@ -10,6 +10,9 @@ RUN yum -y install supervisor && yum clean all
 
 RUN cd /opt && virtualenv django && cd django && mkdir Django
 
+ADD ./start.sh /django_dev.sh
+RUN chmod 755 /django_dev.sh
+
 ADD ./start.sh /start.sh
 RUN chmod 755 /start.sh
 
