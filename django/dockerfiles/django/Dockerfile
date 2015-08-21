@@ -4,11 +4,12 @@ MAINTAINER diego.uribe.gamez@gmail.com
 RUN yum -y update && yum clean all
 
 RUN yum -y install epel-release && yum clean all
-RUN yum -y install python-devel python-setuptools python-pip python-virtualenv && yum clean all
+RUN yum -y install python-devel python-setuptools python-pip && yum clean all
+RUN pip install --upgrade pip
 RUN yum -y install gcc gcc-c++ && yum clean all
 RUN yum -y install supervisor && yum clean all
 
-RUN cd /opt && virtualenv django && cd django && mkdir Django
+RUN cd /opt && mkdir django
 
 ADD ./start.sh /django_dev.sh
 RUN chmod 755 /django_dev.sh

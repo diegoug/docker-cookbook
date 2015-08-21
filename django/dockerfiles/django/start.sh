@@ -2,8 +2,6 @@
 
 __install_requirements() {
 cd /opt/django/
-source bin/activate
-cd Django
 pip install -r requirements.txt
 }
 

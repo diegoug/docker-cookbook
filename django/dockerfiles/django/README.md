@@ -17,11 +17,11 @@ Launching Django
 
 To run container:
 
-    $ sudo docker run --name django -d -v /opt/dockerfiles/django/app/:/opt/django/Django/ --privileged=true <username>/django
+    $ sudo docker run --name django -d -v /opt/dockerfiles/django/app/:/opt/django/ --privileged=true <username>/django
     
 To work in development mode with container:
 
-    $ sudo docker run --name dev-django -it -p 8000:8000 -v /opt/dockerfiles/django/app/:/opt/django/Django/ --privileged=true <username>/django /bin/bash
+    $ sudo docker run --name dev-django -d -p 8000:8000 -v /opt/dockerfiles/django/app/:/opt/django/ --privileged=true <username>/django
 
 Using your django container in development mode
 -----------------------------------------------
@@ -30,6 +30,6 @@ To run the application on development mode
 
     $ sudo docker exec -it dev-django /django_dev.sh
 
-To acces in the application on development mode    
+To acces in the application on development mode
     
     http://127.0.0.1:8000
