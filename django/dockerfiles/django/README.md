@@ -21,7 +21,7 @@ To run container:
     
 To work in development mode with container:
 
-    $ sudo docker run --name dev-django -d -p 8000:8000 -v /opt/dockerfiles/django/app/:/opt/django/ --privileged=true <username>/django
+    $ sudo docker run --name dn-django -dit -p 8000:8000 -v/home/diegoug/documentos/proyectos/docker/dockerfiles/django-nodejs/app/django/:/opt/django/ --privileged=true django-node/django
 
 Using your django container in development mode
 -----------------------------------------------

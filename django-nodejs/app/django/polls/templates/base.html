@@ -1,0 +1,10 @@
+<script src="http://127.0.0.1:3000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io('http://127.0.0.1:3000');
+  socket.on('join', function (data) {
+    var string = 'message: '+ data + '<br>';
+    document.getElementById('data').innerHTML += string;
+  });
+</script>
+<h1>{{ title }}</h1>
+<div id="data"></div>
