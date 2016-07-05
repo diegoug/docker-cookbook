@@ -1,0 +1,37 @@
+version: '2'
+services:
+  # Django
+  django:
+    image: cookbook/development-django
+    container_name: cookbook-django-dev
+    volumes:
+      - ~/.ssh/id_rsa.pub:/tmp/authorized_keys:ro
+      - ../../app:/opt/app
+    ports:
+      - "2222:22"
+      - "8000:8000"
+    environment:
+      - DATABASE_NAME=django
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=cookbook
+      - MYSQL_HOST=cookbook-mysql-dev
+    networks:
+      - cookbook
+  # mysql
+  mysql:
+    image: mysql
+    container_name: cookbook-mysql-dev
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=cookbook
+      - MYSQL_DATABASE=django
+    volumes:
+      - /var/lib/mysql-cookbook:/var/lib/mysql
+    networks:
+        cookbook:
+            aliases:
+                - cookbook-mysql-dev
+networks:
+   cookbook:
+     external: true

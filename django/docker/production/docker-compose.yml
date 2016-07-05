@@ -1,0 +1,53 @@
+version: '2'
+services:
+  # Nginx
+  nginx:
+    restart: always
+    image: nginx
+    container_name: cookbook-nginx
+    volumes:
+      - ../../app:/opt/app
+      - ./nginx/django.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    environment:
+      - DJANGO_PATH=/opt/app
+      - DJANGO_CONTAINER_NAME=cookbook-django
+      - DJANGO_PORT=8000
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    networks:
+      - cookbook
+  # Django
+  django:
+    restart: always
+    image: cookbook/production-django
+    container_name: cookbook-django
+    environment:
+      - DJANGO_PORT=8000
+      - DATABASE_NAME=django
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=cookbook
+      - MYSQL_HOST=cookbook-mysql
+    command: /bin/sh -c "cd /opt/app; python -u manage.py runserver 0.0.0.0:8000"
+    networks:
+        cookbook:
+            aliases:
+                - cookbook-django
+  # mysql
+  mysql:
+    restart: always
+    image: mysql
+    container_name: cookbook-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=cookbook
+      - MYSQL_DATABASE=django
+    volumes:
+      - /var/lib/mysql-cookbook:/var/lib/mysql
+    networks:
+        cookbook:
+            aliases:
+                - cookbook-mysql
+networks:
+   cookbook:
+     external: true
