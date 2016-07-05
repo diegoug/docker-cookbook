@@ -6,7 +6,6 @@ services:
     image: nginx
     container_name: cookbook-nginx
     volumes:
-      - ../../app:/opt/app
       - ./nginx/django.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
