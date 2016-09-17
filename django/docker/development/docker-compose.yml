@@ -5,7 +5,7 @@ networks:
 services:
   # Django ---------------------------------------------------------------------
   django:
-    image: cookbook/django-dev
+    image: cookbook/django-development
     container_name: cookbook-django-development
     volumes:
       - ../../app:/opt/app
@@ -23,7 +23,7 @@ services:
   # mysql ----------------------------------------------------------------------
   mysql:
     image: mysql
-    container_name: cookbook-mysql-dev
+    container_name: cookbook-mysql-development
     ports:
       - "${MYSQL_PORT}:${MYSQL_PORT}"
     environment:
