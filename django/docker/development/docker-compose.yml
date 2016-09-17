@@ -1,37 +1,37 @@
 version: '2'
+networks:
+   cookbook:
+     external: true
 services:
-  # Django
+  # Django ---------------------------------------------------------------------
   django:
-    image: cookbook/development-django
-    container_name: cookbook-django-dev
+    image: cookbook/django-dev
+    container_name: cookbook-django-development
     volumes:
-      - ~/.ssh/id_rsa.pub:/tmp/authorized_keys:ro
       - ../../app:/opt/app
     ports:
-      - "2222:22"
-      - "8000:8000"
+      - "${DJANGO_PORT}:${DJANGO_PORT}"
+    command: /bin/sh -c "cd /opt/app; python manage.py runserver 0.0.0.0:${DJANGO_PORT}"
     environment:
-      - DATABASE_NAME=django
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=cookbook
-      - MYSQL_HOST=cookbook-mysql-dev
+      - MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
     networks:
       - cookbook
-  # mysql
+  # mysql ----------------------------------------------------------------------
   mysql:
     image: mysql
     container_name: cookbook-mysql-dev
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
     environment:
-      - MYSQL_ROOT_PASSWORD=cookbook
-      - MYSQL_DATABASE=django
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE_NAME}
     volumes:
       - /var/lib/mysql-cookbook:/var/lib/mysql
     networks:
         cookbook:
             aliases:
-                - cookbook-mysql-dev
-networks:
-   cookbook:
-     external: true
+                - ${MYSQL_HOST}
