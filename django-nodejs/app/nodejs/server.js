@@ -3,11 +3,11 @@ var Io = require('socket.io'),
     redis = require('redis'),
     cookie = require('cookie'),
     serialize = require('node-serialize'),
-    clientRedis = redis.createClient(6379, 'django-node-redis');
+    clientRedis = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 clientRedis.select(1);
 // module
 var Socket = function(config){
-    this.io = Io.listen(3000);
+    this.io = Io.listen(process.env.SOCKETIO_PORT);
 };
 // run socket
 Socket.prototype.run = function(){
@@ -38,7 +38,7 @@ Socket.prototype.auth = function(socket, next){
         if (session.user == 'diegoug'){
             next()
         } else {
-            console.log('no soy diegoug');
+            console.log("I'm not diegoug");
             return next(new Error('Not authorized.'));
         }
     });

@@ -1,10 +1,11 @@
+import os
 import json
 import redis as Redis
 
 from django.views.generic import TemplateView
 from django.utils.crypto import get_random_string
 
-redis = Redis.StrictRedis(host='django-node-redis', password='', port=6379, db=1)
+redis = Redis.StrictRedis(host=os.environ.get('REDIS_HOST', ''), password='', port=os.environ.get('REDIS_PORT', ''), db=1)
 
 
 class IndexTemplateView(TemplateView):
@@ -26,7 +27,7 @@ class IndexTemplateView(TemplateView):
         self.token = get_random_string(32)
         key = 'session:%s' % str(self.token)
         data = {
-            'user': 'diego'
+            'user': 'diegoug'
         }
         value = json.dumps(data)
         redis.setex(key, 86400, value)

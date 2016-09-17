@@ -1,6 +1,9 @@
-<script src="http://127.0.0.1:3000/socket.io/socket.io.js"></script>
+<script src="{{request.socketio}}/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+  window.nodeServer = '{{request.socketio}}';
+</script>
 <script>
-  var socket = io('http://127.0.0.1:3000');
+  var socket = io(window.nodeServer);
   socket.on('join', function (data) {
     var string = 'message: '+ data + '<br>';
     document.getElementById('data').innerHTML += string;
