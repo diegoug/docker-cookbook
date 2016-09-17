@@ -28,5 +28,8 @@ node_modules
 .lock-wscript
 .idea
 
+# Docker enviroment fiel
+*.env
+
 # Python
 *.pyc
