@@ -2,27 +2,32 @@
 create-network:
 	docker network create cookbook
 
-build-prod:
+# ------------------------------------------------------------------------------
+# production -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+
+build-production:
 	cp -r app/ docker/production/django/app/
-	cd docker/production/django/ && docker build -t "cookbook/production-django" .
+	cd docker/production/django/ && docker build -t "cookbook/django-production" .
 	rm -rf docker/production/django/app/
 
-start-prod:
+start-production:
 	cd docker/production/ && docker-compose up -d
 
-stop-prod:
+stop-production:
 	cd docker/production/ && docker-compose stop
 
-build-dev:
+# ------------------------------------------------------------------------------
+# development ------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+
+build-development:
 	cp app/requirements.txt docker/development/django/
-	cd docker/development/django/ && docker build -t "cookbook/development-django" .
+	cd docker/development/django/ && docker build -t "cookbook/django-development" .
 	rm -rf docker/development/django/requirements.txt
 
-start-dev:
+start-development:
 	cd docker/development/ && docker-compose up -d
 
-stop-dev:
+stop-development:
 	cd docker/development/ && docker-compose stop
-
-django-dev:
-	docker exec -it cookbook-django-dev /bin/sh -c "cd /opt/app; python manage.py runserver 0.0.0.0:8000"
