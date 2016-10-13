@@ -3,6 +3,7 @@ networks:
    cookbook:
      external: true
 services:
+
   # Django ---------------------------------------------------------------------
   django:
     image: cookbook/dn-django-development
@@ -22,6 +23,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
     networks:
       - cookbook
+
   # nodejs ---------------------------------------------------------------------
   nodejs:
     image: cookbook/dn-nodejs-development
@@ -39,6 +41,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
     networks:
       - cookbook
+
   # mysql ----------------------------------------------------------------------
   mysql:
     image: mysql
@@ -54,6 +57,7 @@ services:
         cookbook:
             aliases:
                 - ${MYSQL_HOST}
+
   # redis ----------------------------------------------------------------------
   redis:
     image: redis

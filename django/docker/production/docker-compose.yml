@@ -3,6 +3,7 @@ networks:
    cookbook:
      external: true
 services:
+
   # nginx ----------------------------------------------------------------------
   nginx:
     # restart: always
@@ -20,10 +21,11 @@ services:
     command: /bin/bash -c "envsubst '\$DJANGO_HOST \$DJANGO_PORT \$NGINX_PORT \$SERVER_NAME' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     networks:
       - cookbook
+
   # Django ---------------------------------------------------------------------
   django:
     # restart: always
-    image: cookbook/production-django
+    image: cookbook/django-production
     container_name: cookbook-django
     environment:
       - MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME}
@@ -36,6 +38,7 @@ services:
         cookbook:
             aliases:
                 - ${DJANGO_HOST}
+
   # mysql ----------------------------------------------------------------------
   mysql:
     # restart: always

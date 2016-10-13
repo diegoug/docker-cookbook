@@ -3,6 +3,7 @@ networks:
    cookbook:
      external: true
 services:
+
   # Django ---------------------------------------------------------------------
   django:
     image: cookbook/django-development
@@ -20,6 +21,7 @@ services:
       - MYSQL_PORT=${MYSQL_PORT}
     networks:
       - cookbook
+
   # mysql ----------------------------------------------------------------------
   mysql:
     image: mysql
