@@ -1,0 +1,90 @@
+version: '2'
+networks:
+   cookbook:
+     external: true
+services:
+  # nginx ----------------------------------------------------------------------
+  nginx:
+    # restart: always
+    image: nginx
+    container_name: cookbook-nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/cookbook.conf:/etc/nginx/conf.d/cookbook.conf
+    ports:
+      - '${NGINX_PORT}:${NGINX_PORT}'
+    environment:
+      - NGINX_PORT=${NGINX_PORT}
+      - DJANGO_HOST=${DJANGO_HOST}
+      - NODEJS_HOST=${NODEJS_HOST}
+      - DJANGO_SERVER_NAME=${DJANGO_SERVER_NAME}
+      - SOCKETIO_SERVER_NAME=${SOCKETIO_SERVER_NAME}
+    depends_on:
+      - django
+      - nodejs
+    networks:
+      - cookbook
+
+  # django ---------------------------------------------------------------------
+  django:
+    image: cookbook/dn-django-production
+    container_name: cookbook-dn-django
+    command: /bin/sh -c "cd /opt/app; gunicorn mysite.wsgi -w 4 --max-requests 1000 --timeout 60 -b 0.0.0.0:${DJANGO_PORT}"
+    expose:
+      - '${DJANGO_PORT}'
+    environment:
+      - SOCKETIO_SERVER_NAME=${SOCKETIO_SERVER_NAME}
+      - MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    networks:
+        cookbook:
+            aliases:
+                - ${DJANGO_HOST}
+
+  # nodejs ---------------------------------------------------------------------
+  nodejs:
+    image: cookbook/dn-nodejs-production
+    container_name: cookbook-dn-nodejs
+    command: /bin/sh -c "cd /opt/app/; node server.js"
+    expose:
+      - '${SOCKETIO_PORT}'
+    environment:
+      - NODE_PATH=/opt/node_modules/
+      - SOCKETIO_PORT=${SOCKETIO_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    networks:
+        cookbook:
+            aliases:
+                - ${NODEJS_HOST}
+
+  # mysql ----------------------------------------------------------------------
+  mysql:
+    image: mysql
+    container_name: cookbook-mysql
+    expose:
+      - '${MYSQL_PORT}'
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE_NAME}
+    volumes:
+      - /var/lib/mysql-cookbook:/var/lib/mysql
+    networks:
+        cookbook:
+            aliases:
+                - ${MYSQL_HOST}
+
+  # redis ----------------------------------------------------------------------
+  redis:
+    image: redis
+    container_name: cookbook-redis
+    expose:
+      - '${REDIS_PORT}'
+    networks:
+      cookbook:
+        aliases:
+          - ${REDIS_HOST}
