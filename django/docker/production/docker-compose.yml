@@ -26,6 +26,8 @@ services:
     restart: always
     image: cookbook/django-production
     container_name: cookbook-django
+    expose:
+      - '${DJANGO_PORT}'
     environment:
       - MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME}
       - MYSQL_USER=${MYSQL_USER}
