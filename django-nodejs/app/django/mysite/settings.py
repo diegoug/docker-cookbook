@@ -43,4 +43,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 
-SOCKETIO_PORT=os.environ.get('NODEJS_HOST_PORT', '')
+SOCKETIO_SERVER_NAME = os.environ.get('SOCKETIO_SERVER_NAME', '')
