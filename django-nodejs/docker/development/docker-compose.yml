@@ -28,9 +28,9 @@ services:
   nodejs:
     image: cookbook/dn-nodejs-development
     container_name: cookbook-dn-nodejs-development
-    command: /bin/sh -c "forever start /usr/bin/node-inspector --web-port=${NODEJS_DEBUGGER_PORT}; cd /opt/nodejs/ && supervisor --debug server.js"
+    command: /bin/sh -c "forever start /usr/bin/node-inspector --web-port=${NODEJS_DEBUGGER_PORT}; cd /opt/app/ && supervisor --debug server.js"
     volumes:
-      - ../../app/nodejs:/opt/nodejs
+      - ../../app/nodejs:/opt/app
     ports:
       - "${SOCKETIO_PORT}:${SOCKETIO_PORT}"
       - "${NODEJS_DEBUGGER_PORT}:${NODEJS_DEBUGGER_PORT}"
