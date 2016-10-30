@@ -7,9 +7,14 @@ create-network:
 # ------------------------------------------------------------------------------
 
 build-production:
-	cp -r app/ docker/production/django/app/
-	cd docker/production/django/ && docker build -t "cookbook/django-nodejs-production" .
+	# django
+	cp -r app/django/ docker/production/django/app/
+	cd docker/production/django/ && docker build -t "cookbook/dn-django-production" .
 	rm -rf docker/production/django/app/
+	# nodejs
+	cp -r app/nodejs/ docker/production/django/app/
+	cd docker/production/nodejs/ && docker build -t "cookbook/dn-nodejs-production" .
+	rm -rf docker/production/nodejs/app/
 
 start-production:
 	cd docker/production/ && docker-compose up -d
