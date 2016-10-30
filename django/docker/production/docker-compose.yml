@@ -3,10 +3,9 @@ networks:
    cookbook:
      external: true
 services:
-
   # nginx ----------------------------------------------------------------------
   nginx:
-    # restart: always
+    restart: always
     image: nginx
     container_name: cookbook-nginx
     ports:
@@ -24,7 +23,7 @@ services:
 
   # Django ---------------------------------------------------------------------
   django:
-    # restart: always
+    restart: always
     image: cookbook/django-production
     container_name: cookbook-django
     environment:
@@ -41,7 +40,7 @@ services:
 
   # mysql ----------------------------------------------------------------------
   mysql:
-    # restart: always
+    restart: always
     image: mysql
     container_name: cookbook-mysql
     environment:
