@@ -34,5 +34,5 @@ class IndexTemplateView(TemplateView):
 
     def render_to_response(self, context, **response_kwargs):
         response = super(IndexTemplateView, self).render_to_response(context, **response_kwargs)
-        response.set_cookie(key='nodejskey', value=self.token, max_age=86400, domain='127.0.0.1', secure=None)
+        response.set_cookie(key='nodejskey', value=self.token, max_age=86400, domain=os.environ.get('DJANGO_SERVER_NAME', ''), secure=None)
         return response
