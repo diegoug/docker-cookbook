@@ -5,7 +5,7 @@ networks:
 services:
   # nginx ----------------------------------------------------------------------
   nginx:
-    # restart: always
+    restart: always
     image: nginx
     container_name: cookbook-dn-nginx
     ports:
@@ -19,7 +19,7 @@ services:
       - SOCKETIO_SERVER_NAME=${SOCKETIO_SERVER_NAME}
     volumes:
       - ./nginx/mysite.template:/etc/nginx/conf.d/mysite.template
-    command: /bin/bash -c "envsubst '\$DJANGO_HOST \$DJANGO_PORT  \$NGINX_PORT \$DJANGO_SERVER_NAME \$SOCKETIO_SERVER_NAME' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    command: /bin/bash -c "envsubst '\$DJANGO_HOST \$DJANGO_PORT \$NGINX_PORT \$DJANGO_SERVER_NAME \$SOCKETIO_SERVER_NAME' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     depends_on:
       - django
       - nodejs
@@ -28,12 +28,14 @@ services:
 
   # django ---------------------------------------------------------------------
   django:
+    restart: always
     image: cookbook/dn-django-production
     container_name: cookbook-dn-django
     command: /bin/sh -c "cd /opt/app; gunicorn mysite.wsgi -w 4 --max-requests 1000 --timeout 60 -b 0.0.0.0:${DJANGO_PORT}"
     expose:
       - '${DJANGO_PORT}'
     environment:
+      - DJANGO_SERVER_NAME=${DJANGO_SERVER_NAME}
       - SOCKETIO_SERVER_NAME=${SOCKETIO_SERVER_NAME}
       - MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME}
       - MYSQL_USER=${MYSQL_USER}
@@ -41,6 +43,10 @@ services:
       - MYSQL_HOST=${MYSQL_HOST}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      - nodejs
+      - mysql
+      - redis
     networks:
         cookbook:
             aliases:
@@ -48,6 +54,7 @@ services:
 
   # nodejs ---------------------------------------------------------------------
   nodejs:
+    restart: always
     image: cookbook/dn-nodejs-production
     container_name: cookbook-dn-nodejs
     command: /bin/sh -c "cd /opt/app/; node server.js"
@@ -58,6 +65,8 @@ services:
       - SOCKETIO_PORT=${SOCKETIO_PORT}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      - redis
     networks:
         cookbook:
             aliases:
@@ -65,8 +74,9 @@ services:
 
   # mysql ----------------------------------------------------------------------
   mysql:
+    restart: always
     image: mysql
-    container_name: cookbook-mysql
+    container_name: cookbook-dn-mysql
     expose:
       - '${MYSQL_PORT}'
     environment:
@@ -81,11 +91,12 @@ services:
 
   # redis ----------------------------------------------------------------------
   redis:
+    restart: always
     image: redis
-    container_name: cookbook-redis
+    container_name: cookbook-dn-redis
     expose:
       - '${REDIS_PORT}'
     networks:
-      cookbook:
-        aliases:
-          - ${REDIS_HOST}
+        cookbook:
+            aliases:
+                - ${REDIS_HOST}
