@@ -21,6 +21,10 @@ services:
       - MYSQL_HOST=${MYSQL_HOST}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      - nodejs
+      - mysql
+      - redis
     networks:
       - cookbook
 
@@ -28,7 +32,7 @@ services:
   nodejs:
     image: cookbook/dn-nodejs-development
     container_name: cookbook-dn-nodejs-development
-    command: /bin/sh -c "forever start /usr/bin/node-inspector --web-port=${NODEJS_DEBUGGER_PORT}; cd /opt/app/ && supervisor --debug server.js"
+    command: /bin/sh -c "forever start /usr/local/bin/node-inspector --web-port=${NODEJS_DEBUGGER_PORT}; cd /opt/app/ && supervisor --debug server.js"
     volumes:
       - ../../app/nodejs:/opt/app
     ports:
@@ -39,13 +43,15 @@ services:
       - SOCKETIO_PORT=${SOCKETIO_PORT}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      - redis
     networks:
       - cookbook
 
   # mysql ----------------------------------------------------------------------
   mysql:
     image: mysql
-    container_name: cookbook-mysql-development
+    container_name: cookbook-dn-mysql-development
     ports:
       - "${MYSQL_PORT}:${MYSQL_PORT}"
     environment:
@@ -61,7 +67,7 @@ services:
   # redis ----------------------------------------------------------------------
   redis:
     image: redis
-    container_name: cookbook-redis-development
+    container_name: cookbook-dn-redis-development
     networks:
       cookbook:
         aliases:

@@ -1,5 +1,5 @@
 upstream django_server {
-    server cookbook-django;
+    server cookbook-d-django;
 }
 
 server {

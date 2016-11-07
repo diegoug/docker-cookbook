@@ -7,7 +7,7 @@ services:
   nginx:
     restart: always
     image: nginx
-    container_name: cookbook-nginx
+    container_name: cookbook-d-nginx
     ports:
       - '${NGINX_PORT}:${NGINX_PORT}'
     environment:
@@ -18,14 +18,16 @@ services:
     volumes:
       - ./nginx/mysite.template:/etc/nginx/conf.d/mysite.template
     command: /bin/bash -c "envsubst '\$DJANGO_HOST \$DJANGO_PORT \$NGINX_PORT \$SERVER_NAME' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    depends_on:
+      - django
     networks:
       - cookbook
 
-  # Django ---------------------------------------------------------------------
+  # django ---------------------------------------------------------------------
   django:
     restart: always
     image: cookbook/django-production
-    container_name: cookbook-django
+    container_name: cookbook-d-django
     expose:
       - '${DJANGO_PORT}'
     environment:
@@ -35,6 +37,8 @@ services:
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_PORT=${MYSQL_PORT}
     command: /bin/sh -c "cd /opt/app; gunicorn mysite.wsgi -w 4 --max-requests 1000 --timeout 60 -b 0.0.0.0:${DJANGO_PORT}"
+    depends_on:
+      - mysql
     networks:
         cookbook:
             aliases:
@@ -44,7 +48,7 @@ services:
   mysql:
     restart: always
     image: mysql
-    container_name: cookbook-mysql
+    container_name: cookbook-d-mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE_NAME}
