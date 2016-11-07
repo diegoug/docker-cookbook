@@ -25,7 +25,7 @@ server {
 
 server {
         listen 80;
-        server_name localhost;
+        server_name dockerhelp.com;
         client_max_body_size 30m;
         root /opt/app;
         try_files $uri @django_server;
