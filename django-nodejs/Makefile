@@ -12,7 +12,7 @@ build-production:
 	cd docker/production/django/ && docker build -t "cookbook/dn-django-production" .
 	rm -rf docker/production/django/app/
 	# nodejs
-	cp -r app/nodejs/ docker/production/django/app/
+	cp -r app/nodejs/ docker/production/nodejs/app/
 	cd docker/production/nodejs/ && docker build -t "cookbook/dn-nodejs-production" .
 	rm -rf docker/production/nodejs/app/
 
