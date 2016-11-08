@@ -3,8 +3,7 @@ networks:
    cookbook:
      external: true
 services:
-
-  # Django ---------------------------------------------------------------------
+  # django ---------------------------------------------------------------------
   django:
     image: cookbook/dn-django-development
     container_name: cookbook-dn-django-development

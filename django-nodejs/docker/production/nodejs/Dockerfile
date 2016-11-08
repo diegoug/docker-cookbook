@@ -6,7 +6,6 @@ RUN yum -y install wget
 RUN yum -y install epel-release
 RUN yum -y install gcc gcc-c++
 RUN yum -y install make
-RUN yum -y install mongodb
 RUN yum clean all
 
 RUN mkdir node-latest
