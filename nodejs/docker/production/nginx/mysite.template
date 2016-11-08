@@ -1,0 +1,12 @@
+upstream nodejs{
+    server cookbook-n-nodejs;
+}
+
+server {
+        listen 80;
+        server_name localhost;
+        root /opt/nodejs;
+        location / {
+            proxy_pass http://nodejs;
+        }
+}
