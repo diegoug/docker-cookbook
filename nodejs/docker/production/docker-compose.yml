@@ -1,0 +1,53 @@
+version: '2'
+networks:
+   cookbook:
+     external: true
+services:
+  # nginx ----------------------------------------------------------------------
+  nginx:
+    restart: always
+    image: nginx
+    container_name: cookbook-n-nginx
+    ports:
+      - '${NGINX_PORT}:${NGINX_PORT}'
+    environment:
+      - NGINX_PORT=${NGINX_PORT}
+      - NODEJS_HOST=${NODEJS_HOST}
+      - NODEJS_SERVER_NAME=${NODEJS_SERVER_NAME}
+    volumes:
+      - ./nginx/mysite.template:/etc/nginx/conf.d/mysite.template
+    command: /bin/bash -c "envsubst '\$NGINX_PORT \$NODEJS_SERVER_NAME \$NODEJS_HOST' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    depends_on:
+      - nodejs
+    networks:
+      - cookbook
+
+  # nodejs ---------------------------------------------------------------------
+  nodejs:
+    image: cookbook/n-nodejs-production
+    container_name: cookbook-n-nodejs
+    command: /bin/sh -c "cd /opt/app/; node server.js"
+    expose:
+      - "${NODEJS_PORT}"
+    environment:
+      - NODE_PATH=/opt/node_modules/
+      - NODEJS_PORT=${NODEJS_PORT}
+    depends_on:
+      - mongodb
+    networks:
+        cookbook:
+            aliases:
+                - ${NODEJS_HOST}
+
+  # mongodb --------------------------------------------------------------------
+  mongodb:
+    image: mongo
+    container_name: cookbook-n-mongodb
+    expose:
+      - "${MONGODB_PORT}"
+    volumes:
+      - /data/db-cookbook-n-mongodb-production/:/data/db/
+    networks:
+        cookbook:
+            aliases:
+                - ${MONGODB_HOST}
