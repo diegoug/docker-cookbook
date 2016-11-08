@@ -12,6 +12,6 @@ router.get('/', function(req, res) {
 app.use(router);
 
 // Start server
-app.listen(8080, function() {
-    console.log("Node server running on http://localhost:8080");
+app.listen(process.env.NODEJS_PORT, function() {
+    console.log("Node server running on http://localhost:"+process.env.NODEJS_PORT);
 });
