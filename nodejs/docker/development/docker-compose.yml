@@ -1,0 +1,35 @@
+version: '2'
+networks:
+   cookbook:
+     external: true
+services:
+  # nodejs ---------------------------------------------------------------------
+  nodejs:
+    image: cookbook/n-nodejs-development
+    container_name: cookbook-n-nodejs-development
+    command: /bin/sh -c "forever start /usr/local/bin/node-inspector --web-port=${NODEJS_DEBUGGER_PORT}; cd /opt/app/ && supervisor --debug server.js"
+    volumes:
+      - ../../app:/opt/app
+    ports:
+      - "${NODEJS_PORT}:${NODEJS_PORT}"
+      - "${NODEJS_DEBUGGER_PORT}:${NODEJS_DEBUGGER_PORT}"
+    environment:
+      - NODE_PATH=/opt/node_modules/
+      - NODEJS_PORT=${NODEJS_PORT}
+    depends_on:
+      - mongodb
+    networks:
+      - cookbook
+
+  # mongodb --------------------------------------------------------------------
+  mongodb:
+    image: mongo
+    container_name: cookbook-n-mongodb-development
+    ports:
+      - "${MONGODB_PORT}:${MONGODB_PORT}"
+    volumes:
+      - /data/db-cookbook-n-mongodb-development/:/data/db/
+    networks:
+        cookbook:
+            aliases:
+                - ${MONGODB_HOST}
