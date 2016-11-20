@@ -1,0 +1,54 @@
+version: '2'
+networks:
+   cookbook:
+     external: true
+services:
+
+  # app ------------------------------------------------------------------------
+  app:
+    # restart: always
+    image: busybox
+    container_name: cookbook-app
+    command: /bin/sh -c "while true; do echo hello world; sleep 1; done"
+    links:
+      - logstash
+    logging:
+        driver: gelf
+        options:
+            gelf-address: udp://localhost:12201
+    networks:
+      - cookbook
+
+  logstash:
+    # restart: always
+    image: cookbook/logstash
+    container_name: cookbook-logstash
+    ports:
+      - "12201:12201/udp"
+    links:
+      - elasticsearch
+    networks:
+        cookbook:
+            aliases:
+                - ${LOGSTASH_HOST}
+
+  elasticsearch:
+    # restart: always
+    image: elasticsearch:5.0
+    container_name: cookbook-elasticsearch
+    command: elasticsearch -E network.host=0.0.0.0
+    networks:
+        cookbook:
+            aliases:
+                - ${ELASTICSEARCH_HOST}
+
+  kibana:
+    # restart: always
+    image: kibana:5.0
+    container_name: cookbook-kibana
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
+    networks:
+      - cookbook
