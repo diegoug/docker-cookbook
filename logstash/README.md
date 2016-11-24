@@ -14,18 +14,12 @@ To use the commands put in parallel to the Makefile and execute the command that
 `$ make create-network`
 
 ### Create network
-`$ make create-network`
-==
 `$ docker network create cookbook`
 
 ### Build production
-`$ make build-production`
-==
 `$ cd docker/production/logstash/ && docker build -t "cookbook/logstash" .`
 
 ### Start production
-`$ make start-production`
-==
 `$ cd docker/production/ && docker-compose up -d`
 
 [Requirement](https://www.elastic.co/guide/en/elasticsearch/reference/5.0/vm-max-map-count.html)
@@ -36,6 +30,4 @@ As a result, Elasticsearch is more strict about the bootstrap checks that it per
 `$ sudo sysctl -w vm.max_map_count=262144`
 
 ### Stop production
-`$ stop-production`
-==
 `$ cd docker/production/ && docker-compose stop`
