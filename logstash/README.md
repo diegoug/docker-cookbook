@@ -22,9 +22,7 @@ To use the commands put in parallel to the Makefile and execute the command that
 ### Start production
 `$ cd docker/production/ && docker-compose up -d`
 
-[Requirement](https://www.elastic.co/guide/en/elasticsearch/reference/5.0/vm-max-map-count.html)
-since 5.0, Elasticsearch only listens on localhost by default, so this image sets network.host to 0.0.0.0
-
+[Requirement](https://www.elastic.co/guide/en/elasticsearch/reference/5.0/vm-max-map-count.html): since 5.0, Elasticsearch only listens on localhost by default, so this image sets network.host to 0.0.0.0
 As a result, Elasticsearch is more strict about the bootstrap checks that it performs, especially when checking the value of vm.max_map_count which is not namespaced and thus must be set to an acceptable value on the host
 
 `$ sudo sysctl -w vm.max_map_count=262144`
