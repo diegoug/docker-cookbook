@@ -1,0 +1,71 @@
+version: '2'
+networks:
+   cookbook:
+     external: true
+services:
+  # nginx ----------------------------------------------------------------------
+  nginx:
+    restart: always
+    image: nginx:1.11
+    container_name: cookbook-logs-nginx
+    ports:
+      - '${NGINX_PORT}:${NGINX_PORT}'
+    environment:
+      - NGINX_PORT=${NGINX_PORT}
+      - SERVER_NAME=${SERVER_NAME}
+      - KIBANA_HOST=${KIBANA_HOST}
+    volumes:
+      - ./nginx/mysite.template:/etc/nginx/conf.d/mysite.template
+    command: /bin/bash -c "envsubst '\$KIBANA_HOST \$NGINX_PORT \$SERVER_NAME' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    depends_on:
+      - app
+    networks:
+      - cookbook
+
+  # app ------------------------------------------------------------------------
+  app:
+    restart: always
+    image: busybox
+    container_name: cookbook-logs-app
+    command: /bin/sh -c "while true; do echo hello world; sleep 1; done"
+    logging:
+        driver: gelf
+        options:
+            gelf-address: ${LOGS_PROTOCOL}://${LOGS_HOST}:${LOGS_PORT}
+    networks:
+      - cookbook
+
+  # kibana ---------------------------------------------------------------------
+  logstash:
+    restart: always
+    image: cookbook/logstash
+    container_name: cookbook-logs-logstash
+    ports:
+      - "${LOGS_PORT}:${LOGS_PORT}/${LOGS_PROTOCOL}"
+    networks:
+        cookbook:
+            aliases:
+                - ${LOGSTASH_HOST}
+
+  elasticsearch:
+    restart: always
+    image: elasticsearch:5.0
+    container_name: cookbook-logs-elasticsearch
+    command: elasticsearch -E network.host=0.0.0.0
+    networks:
+        cookbook:
+            aliases:
+                - ${ELASTICSEARCH_HOST}
+
+  kibana:
+    restart: always
+    image: kibana:5.0
+    container_name: cookbook-logs-kibana
+    expose:
+      - '${KIBANA_SERVER_PORT}'
+    environment:
+      - SERVER_PORT=${KIBANA_SERVER_PORT}
+    networks:
+        cookbook:
+            aliases:
+                - ${KIBANA_HOST}
