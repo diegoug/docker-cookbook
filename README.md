@@ -349,8 +349,6 @@ services:
     restart: always
     image: cookbook/django-production
     container_name: cookbook-d-django
-    expose:
-      - '${DJANGO_PORT}'
     command: /bin/sh -c "cd /opt/app; gunicorn mysite.wsgi -w 4 --max-requests 1000 --timeout 60 -b 0.0.0.0:${DJANGO_PORT}"
 ```
 Logs
@@ -367,6 +365,51 @@ $ docker logs -f cookbook-d-django
 
 Note: to know more about why use Gunicorn see the following link:
 [Why do I need Nginx and something like Gunicorn?](http://serverfault.com/questions/331256/why-do-i-need-nginx-and-something-like-gunicorn?answertab=active#tab-top)
+
+#### Development
+To work with django in development mode is necessary to run it and if it sees a change is restarted, to achieve this directly run the command in development mode and review the logs to see its changing state.
+
+##### Example:
+Docker-compose.yml
+```
+services:
+  django:
+    image: cookbook/django-development
+    container_name: cookbook-d-django-development
+    volumes:
+      - ../../app:/opt/app
+    command: /bin/sh -c "cd /opt/app; python manage.py runserver 0.0.0.0:${DJANGO_PORT}"
+```
+Logs
+```
+$ docker logs -f cookbook-d-django-development
+[11/Dec/2016 20:49:10] "GET / HTTP/1.1" 200 40
+Not Found: /favicon.ico
+[11/Dec/2016 20:49:10] "GET /favicon.ico HTTP/1.1" 404 1944
+```
+
+[Back to Index](#index)
+
+### Nodejs
+Node.js is a server-side engine based on Google's V8 engine.
+
+#### Production
+Nodejs in production mode can be run directly on the container
+
+##### Example:
+Docker-compose.yml
+```
+services:
+  nodejs:
+    image: cookbook/n-nodejs-production
+    container_name: cookbook-n-nodejs
+    command: /bin/sh -c "cd /opt/app/; node server.js"
+```
+Logs
+```
+$ docker logs -f cookbook-d-nodejs
+
+```
 
 #### Development
 To work with django in development mode is necessary to run it and if it sees a change is restarted, to achieve this directly run the command in development mode and review the logs to see its changing state.
