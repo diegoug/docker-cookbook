@@ -10,8 +10,8 @@ RUN yum -y install mongodb
 RUN yum clean all
 
 RUN mkdir node-latest
-RUN cd node-latest && wget http://nodejs.org/dist/v4.6.0/node-v4.6.0.tar.gz
-RUN cd node-latest && tar xvf node-v4.6.0.tar.gz && rm node-v4.6.0.tar.gz
+RUN cd node-latest && wget http://nodejs.org/dist/v6.9.2/node-v6.9.2.tar.gz
+RUN cd node-latest && tar xvf node-v6.9.2.tar.gz && rm node-v6.9.2.tar.gz
 RUN cd node-latest && cd * && ./configure
 RUN cd node-latest && cd * && make
 RUN cd node-latest && cd * && make install
