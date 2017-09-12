@@ -5,13 +5,13 @@ RUN yum -y update
 
 RUN yum -y install epel-release
 RUN yum -y install gcc gcc-c++
-RUN yum -y install mariadb mariadb-devel MySQL-python
-
-RUN yum -y install python-devel python-setuptools python-pip
-RUN pip install --upgrade pip
+RUN yum -y install postgresql postgresql-devel python-psycopg2
+RUN yum -y install python34 python34-setuptools python34-devel
 
 RUN yum clean all
 
+RUN easy_install-3.4 pip
+
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt
+RUN pip3 install -r /tmp/requirements.txt
 RUN rm -f /tmp/requirements.txt

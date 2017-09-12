@@ -1,7 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from polls.views import IndexTemplateView
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', IndexTemplateView.as_view()),
-)
+]
