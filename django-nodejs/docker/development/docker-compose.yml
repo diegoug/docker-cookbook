@@ -32,7 +32,7 @@ services:
   nodejs:
     image: cookbook/dn-nodejs-development
     container_name: cookbook-dn-nodejs-development
-    command: /bin/sh -c "forever start /usr/local/bin/node-inspector --web-port=${NODEJS_DEBUGGER_PORT}; cd /opt/app/ && supervisor --debug server.js"
+    command: /bin/sh -c "cd /opt/app/ && node --inspect=0.0.0.0:${NODEJS_DEBUGGER_PORT} server.js"
     volumes:
       - ../../app/nodejs:/opt/app
     ports:
