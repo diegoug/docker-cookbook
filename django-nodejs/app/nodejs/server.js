@@ -2,7 +2,6 @@
 var Io = require('socket.io'),
     redis = require('redis'),
     cookie = require('cookie'),
-    serialize = require('node-serialize'),
     clientRedis = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 clientRedis.select(1);
 // module
@@ -33,7 +32,7 @@ Socket.prototype.auth = function(socket, next){
             return next(new Error('Not authorized.'));
         }
         // config session
-        session = serialize.unserialize(session);
+        session = JSON.parse((session);
         socket.handshake.user = session.user;
         if (session.user == 'diegoug'){
             next()
